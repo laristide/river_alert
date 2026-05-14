@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Rosario Central
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260516T193000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260516T220000
-DTSTAMP:20260514T181249Z
+DTSTAMP:20260514T182519Z
 UID:b87f1d6424359492@river-alert
 DESCRIPTION:Apertura 2026 — Local — Fuente: cariverplate.com.ar
 LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
@@ -25,7 +25,7 @@ BEGIN:VEVENT
 SUMMARY:River vs RB Bragantino (Bra.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260520T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260521T000000
-DTSTAMP:20260514T181249Z
+DTSTAMP:20260514T182519Z
 UID:5c26b1177dc0b402@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
