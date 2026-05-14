@@ -1,0 +1,46 @@
+name: build-events-ics
+
+on:
+  schedule:
+    # 12:00 UTC = 09:00 ART. Runs daily, leaves the rest of the day for
+    # Google Calendar to poll the published .ics before the 21:00 VALARM.
+    - cron: "0 12 * * *"
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "manual_events.yaml"
+      - ".github/workflows/build.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install
+        run: pip install -e .
+
+      - name: Generate events.ics
+        run: python -m src.main
+
+      - name: Commit updated calendar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain docs/events.ics)" ]]; then
+            git add docs/events.ics
+            git commit -m "chore: refresh events.ics ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "events.ics unchanged — nothing to commit."
+          fi

@@ -1,0 +1,18 @@
+# Manual concerts / events at Estadio Más Monumental that the auto-sources
+# (cariverplate.com.ar, dfentertainment.com) miss.
+#
+# Add one entry per event-day. Fields:
+#   date:  YYYY-MM-DD       (required)
+#   time:  "HH:MM"          (optional, defaults to 20:00 ART)
+#   title: "..."            (required, free text shown in the calendar)
+#   note:  "..."            (optional, extra context in the event description)
+#
+# Past entries can stay; the script ignores anything before today.
+
+# Examples (uncomment to test):
+# - date: 2026-11-15
+#   time: "21:00"
+#   title: "Bad Bunny — Most Wanted Tour"
+#   note: "Live Nation"
+# - date: 2026-12-10
+#   title: "Lollapalooza Argentina día 1"

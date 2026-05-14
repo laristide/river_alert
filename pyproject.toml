@@ -1,0 +1,19 @@
+[project]
+name = "river-alert"
+version = "0.1.0"
+description = "Daily check + Google Calendar alert for events at Estadio Mas Monumental"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "icalendar>=5.0",
+    "PyYAML>=6.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
