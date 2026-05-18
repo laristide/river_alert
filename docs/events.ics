@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs RB Bragantino (Bra.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260520T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260521T000000
-DTSTAMP:20260517T131649Z
+DTSTAMP:20260518T152857Z
 UID:5c26b1177dc0b402@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
@@ -23,19 +23,18 @@ TRIGGER;VALUE=DATE-TIME:20260520T000000Z
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:River vs Blooming (Bol.)
-DTSTART;TZID=America/Argentina/Buenos_Aires:20260527T213000
-DTEND;TZID=America/Argentina/Buenos_Aires:20260528T000000
-DTSTAMP:20260517T131649Z
-UID:716d8e388893e88c@river-alert
-DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
- com.ar
+SUMMARY:River vs Belgrano
+DTSTART;TZID=America/Argentina/Buenos_Aires:20260524T153000
+DTEND;TZID=America/Argentina/Buenos_Aires:20260524T180000
+DTSTAMP:20260518T152857Z
+UID:012496c433882495@river-alert
+DESCRIPTION:Apertura 2026 — Local — Fuente: cariverplate.com.ar
 LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
  s Aires
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Evento mañana en el Monumental: River vs Blooming (Bol.)
-TRIGGER;VALUE=DATE-TIME:20260527T000000Z
+DESCRIPTION:Evento mañana en el Monumental: River vs Belgrano
+TRIGGER;VALUE=DATE-TIME:20260524T000000Z
 END:VALARM
 END:VEVENT
 END:VCALENDAR
