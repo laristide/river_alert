@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs RB Bragantino (Bra.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260520T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260521T000000
-DTSTAMP:20260518T152857Z
+DTSTAMP:20260519T145734Z
 UID:5c26b1177dc0b402@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
@@ -26,7 +26,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Belgrano
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260524T153000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260524T180000
-DTSTAMP:20260518T152857Z
+DTSTAMP:20260519T145734Z
 UID:012496c433882495@river-alert
 DESCRIPTION:Apertura 2026 — Local — Fuente: cariverplate.com.ar
 LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
