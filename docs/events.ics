@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Belgrano
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260524T153000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260524T180000
-DTSTAMP:20260522T143533Z
+DTSTAMP:20260523T132114Z
 UID:012496c433882495@river-alert
 DESCRIPTION:Apertura 2026 — Local — Fuente: cariverplate.com.ar
 LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
@@ -25,7 +25,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Blooming (Bol.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260527T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260528T000000
-DTSTAMP:20260522T143533Z
+DTSTAMP:20260523T132114Z
 UID:716d8e388893e88c@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
