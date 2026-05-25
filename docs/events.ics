@@ -7,25 +7,10 @@ X-WR-CALDESC:Eventos en el Estadio Más Monumental
 X-WR-CALNAME:Evento River
 X-WR-TIMEZONE:America/Argentina/Buenos_Aires
 BEGIN:VEVENT
-SUMMARY:River vs Belgrano
-DTSTART;TZID=America/Argentina/Buenos_Aires:20260524T153000
-DTEND;TZID=America/Argentina/Buenos_Aires:20260524T180000
-DTSTAMP:20260524T132225Z
-UID:012496c433882495@river-alert
-DESCRIPTION:Apertura 2026 — Local — Fuente: cariverplate.com.ar
-LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
- s Aires
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Evento mañana en el Monumental: River vs Belgrano
-TRIGGER;VALUE=DATE-TIME:20260524T000000Z
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:River vs Blooming (Bol.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260527T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260528T000000
-DTSTAMP:20260524T132225Z
+DTSTAMP:20260525T145024Z
 UID:716d8e388893e88c@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
