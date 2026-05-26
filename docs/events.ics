@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Blooming (Bol.)
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260527T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260528T000000
-DTSTAMP:20260525T145024Z
+DTSTAMP:20260526T152135Z
 UID:716d8e388893e88c@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Fuente: cariverplate.
  com.ar
