@@ -95,6 +95,16 @@ manual_events.yaml                 your edits
 .github/workflows/build.yml        daily cron
 ```
 
+## Maintenance
+
+GitHub **disables scheduled (cron) workflows after 60 days without repository
+activity**. Only commits from a real user account reset this clock — the
+workflow's own `github-actions[bot]` commits that refresh `events.ics` do
+**not** count. If you get a "workflow will be disabled soon" email, push any
+commit from your account (a trivial edit is enough) to re-arm it for another
+60 days. If it has already been disabled, also click **Enable workflow** on
+the repo's Actions tab — a push alone won't re-enable it.
+
 ## Known limitations
 
 - **Coverage isn't 100%.** Some concerts may be booked by promoters that
