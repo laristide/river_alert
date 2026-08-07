@@ -6,4 +6,36 @@ METHOD:PUBLISH
 X-WR-CALDESC:Eventos en el Estadio Más Monumental
 X-WR-CALNAME:Evento River
 X-WR-TIMEZONE:America/Argentina/Buenos_Aires
+BEGIN:VEVENT
+SUMMARY:Foo Fighters
+DTSTART;TZID=America/Argentina/Buenos_Aires:20270110T200000
+DTEND;TZID=America/Argentina/Buenos_Aires:20270110T223000
+DTSTAMP:20260807T125721Z
+UID:bb4fc434cca15f5c@river-alert
+DESCRIPTION:Concierto / show — Estadio Mâs Monumental — Fuente: dfent
+ ertainment.com/shows/foo-fighters
+LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
+ s Aires
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evento mañana en el Monumental: Foo Fighters
+TRIGGER;VALUE=DATE-TIME:20270110T000000Z
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Foo Fighters
+DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
+DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
+DTSTAMP:20260807T125721Z
+UID:8539098917dece76@river-alert
+DESCRIPTION:Concierto / show — Estadio Mâs Monumental — Fuente: dfent
+ ertainment.com/shows/foo-fighters
+LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
+ s Aires
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evento mañana en el Monumental: Foo Fighters
+TRIGGER;VALUE=DATE-TIME:20270225T000000Z
+END:VALARM
+END:VEVENT
 END:VCALENDAR
