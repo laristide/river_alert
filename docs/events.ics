@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270110T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270110T223000
-DTSTAMP:20260810T130134Z
+DTSTAMP:20260811T125756Z
 UID:bb4fc434cca15f5c@river-alert
 DESCRIPTION:Concierto / show — Estadio Mâs Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
@@ -26,7 +26,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20260810T130134Z
+DTSTAMP:20260811T125756Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Mâs Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
