@@ -10,7 +10,8 @@ deciding whether to move the car or skip driving entirely.
 
 1. A GitHub Actions cron runs daily at 09:00 ART (12:00 UTC).
 2. The script pulls upcoming events from three sources:
-   - **`cariverplate.com.ar/proximos-partidos`** — River Plate fixtures (auto).
+   - **`riverplate.com/api/v1/sports/opta/matches/recent-and-upcoming`** —
+     River Plate fixtures (auto), the JSON feed the club's own site reads.
    - **`dfentertainment.com/venues/estadio-river-plate`** — DF Entertainment
      shows booked at the stadium (auto).
    - **`manual_events.yaml`** — events you add by hand when the auto-sources
@@ -85,7 +86,7 @@ python -m src.main
 src/
 ├── model.py                       Event dataclass
 ├── sources/
-│   ├── river.py                   cariverplate.com.ar scraper
+│   ├── river.py                   riverplate.com fixtures API client
 │   ├── df_entertainment.py        DF venue + show pages scraper
 │   └── manual.py                  manual_events.yaml loader
 ├── ics_writer.py                  builds the .ics + VALARM
@@ -105,7 +106,23 @@ commit from your account (a trivial edit is enough) to re-arm it for another
 60 days. If it has already been disabled, also click **Enable workflow** on
 the repo's Actions tab — a push alone won't re-enable it.
 
+## When it breaks
+
+If a source raises, the run still writes `events.ics` from the sources that
+worked, then **fails the workflow on purpose** so GitHub emails you. A red run
+in the Actions tab means "the calendar is thinner than it should be", not
+"nothing was published". Reproduce it locally with `python -m src.main
+--dry-run` — the exit code is non-zero when a source failed.
+
 ## Known limitations
+
+- **Away matches are excluded.** The calendar answers "is there something at
+  the Monumental?", so fixtures at any other ground are dropped. Change
+  `_is_home_venue` in `src/sources/river.py` if you want every River match.
+- **Fixtures without a confirmed date are skipped.** The AFA often lists a
+  match weeks out with `Fecha sin definir`; the feed still carries a
+  placeholder date, which would fire a night-before alarm for the wrong day.
+  Those appear in the calendar once the club confirms the date.
 
 - **Coverage isn't 100%.** Some concerts may be booked by promoters that
   don't publish a scrape-friendly venue page (Live Nation Argentina, T4F).

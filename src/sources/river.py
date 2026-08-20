@@ -1,99 +1,119 @@
 from __future__ import annotations
 
 import logging
-import re
+import unicodedata
 from datetime import datetime
+from typing import Any
 
 import requests
-from bs4 import BeautifulSoup
 
 from ..model import ART, Event
 
 log = logging.getLogger(__name__)
 
-URL = "https://www.cariverplate.com.ar/proximos-partidos"
+# cariverplate.com.ar now 301s to riverplate.com, which is a client-rendered
+# SPA — the fixture list is not in the served HTML. The React app reads it from
+# this JSON endpoint (VITE_API_BASE_URL + /sports/opta/matches/recent-and-upcoming).
+URL = "https://www.riverplate.com/api/v1/sports/opta/matches/recent-and-upcoming"
 UA = "Mozilla/5.0 (river-alert; +https://github.com)"
 
-_DATE_RE = re.compile(
-    r"(?:Lunes|Martes|Mi[eé]rcoles|Jueves|Viernes|S[aá]bado|Domingo)\s+"
-    r"(\d{1,2})/(\d{1,2})/(\d{4})\s*-\s*(\d{1,2})\.(\d{2})",
-    re.IGNORECASE,
-)
+# The upstream feed double-encodes "Más"; normalise it for display.
+_VENUE_FIXES = {"Mâs": "Más", "MÃ¡s": "Más"}
+
+# Only events at River's own stadium belong in this calendar. Match on the full
+# "mas monumental" and not just "monumental": Atlético Tucumán's ground is
+# "Estadio Monumental Presidente José Fierro", which would otherwise slip in.
+_HOME_VENUE = "mas monumental"
+
+
+def _normalise_venue(venue: str) -> str:
+    for bad, good in _VENUE_FIXES.items():
+        venue = venue.replace(bad, good)
+    return venue
+
+
+def _is_home_venue(venue: str) -> bool:
+    folded = (
+        unicodedata.normalize("NFKD", venue)
+        .encode("ascii", "ignore")
+        .decode("ascii")
+        .lower()
+    )
+    return _HOME_VENUE in " ".join(folded.split())
 
 
 def fetch() -> list[Event]:
-    resp = requests.get(URL, headers={"User-Agent": UA}, timeout=20)
+    resp = requests.get(
+        URL,
+        headers={"User-Agent": UA, "Accept": "application/json"},
+        timeout=20,
+    )
     resp.raise_for_status()
-    return parse(resp.text)
+    return parse(resp.json())
 
 
-def parse(html: str) -> list[Event]:
-    soup = BeautifulSoup(html, "html.parser")
+def parse(payload: Any) -> list[Event]:
+    """Build events from the recent-and-upcoming payload.
+
+    Raises RuntimeError when the response does not have the expected shape, so
+    that an upstream change surfaces as a failed run instead of an empty
+    calendar (which is what happened when the site moved to riverplate.com).
+    """
+    if not isinstance(payload, dict) or not payload.get("success"):
+        raise RuntimeError(f"river: unexpected API payload: {str(payload)[:200]}")
+    data = payload.get("data")
+    if not isinstance(data, dict) or "upcoming" not in data:
+        raise RuntimeError(f"river: no 'upcoming' key in API data: {str(data)[:200]}")
+
+    upcoming = data["upcoming"] or []
     events: list[Event] = []
 
-    # Each fixture block is a "row" whose left column holds the competition
-    # name in <p><strong>...</strong></p> and the right column (col-xs-6) holds
-    # the date string and the "<strong>HOME</strong> VS AWAY" line.
-    for right in soup.select("div.col-xs-6"):
-        text = right.get_text(" ", strip=True)
-        m = _DATE_RE.search(text)
-        if not m:
+    for m in upcoming:
+        if m.get("date_unassigned"):
+            log.info("river: skipping fixture with no confirmed date: %s", m.get("slug"))
             continue
 
-        day, month, year, hh, mm = (int(x) for x in m.groups())
-        start = datetime(year, month, day, hh, mm, tzinfo=ART)
+        raw_date = m.get("match_date")
+        try:
+            start = datetime.strptime(raw_date, "%Y-%m-%d %H:%M:%S").replace(tzinfo=ART)
+        except (TypeError, ValueError):
+            log.warning("river: unparseable match_date %r (%s)", raw_date, m.get("slug"))
+            continue
 
-        # Home/away: home team is the one inside <strong>.
-        strong = right.find("strong")
-        home = strong.get_text(strip=True) if strong else "River Plate"
-        # "HOME VS AWAY" after stripping the date prefix
-        vs_text = text[m.end():].strip()
-        # vs_text starts with home (already in strong), then "VS away"
-        # Drop the leading home name + 'VS' to get the away team.
-        away = re.sub(r"^.*?\bVS\b\s*", "", vs_text, count=1, flags=re.I).strip()
-        if not away:
-            away = "?"
-
-        # Competition: the previous .row's left column has <p><strong>.
-        row = right.find_parent(class_="row")
-        comp = ""
-        if row is not None:
-            left = row.find("div", class_="col-xs-5")
-            if left:
-                p_strong = left.find("strong")
-                if p_strong:
-                    comp = p_strong.get_text(strip=True)
-
+        home = (m.get("home_team_name") or "").strip()
+        away = (m.get("away_team_name") or "").strip()
         is_home = home.lower().startswith("river")
-        local_str = "Local" if is_home else "Visitante"
         title = f"River vs {away}" if is_home else f"{home} vs River"
-        desc_parts = [comp] if comp else []
-        desc_parts.append(local_str)
-        desc_parts.append("Fuente: cariverplate.com.ar")
-        description = " — ".join(desc_parts)
+
+        venue = _normalise_venue((m.get("venue_name") or "").strip())
+        if not _is_home_venue(venue):
+            # Away and neutral-ground matches are not events at the Monumental.
+            # Warn when River is nominally home, so a venue rename upstream is
+            # visible instead of quietly emptying the calendar.
+            level = log.warning if is_home else log.info
+            level("river: skipping %s — venue %r is not the Monumental", title, venue)
+            continue
+
+        parts = [p for p in (m.get("tournament_name") or "").strip().split("\n") if p]
+        desc_parts = parts[:1]
+        desc_parts.append("Local")
+        desc_parts.append(venue)
+        if m.get("schedule_unassigned"):
+            desc_parts.append("horario a confirmar")
+        desc_parts.append("Fuente: riverplate.com")
 
         events.append(
             Event(
                 start=start,
                 title=title,
-                description=description,
+                description=" — ".join(desc_parts),
                 source="river",
             )
         )
 
-    # Dedup identical (same start + title) — the page sometimes renders the same
-    # fixture in multiple components (next-match teaser + list).
-    seen = set()
-    unique: list[Event] = []
-    for e in events:
-        key = (e.start, e.title)
-        if key in seen:
-            continue
-        seen.add(key)
-        unique.append(e)
-
-    log.info("river: %d fixtures parsed", len(unique))
-    return unique
+    events.sort(key=lambda e: e.start)
+    log.info("river: %d fixtures parsed", len(events))
+    return events
 
 
 if __name__ == "__main__":

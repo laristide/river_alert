@@ -30,10 +30,16 @@ jobs:
       - name: Install
         run: pip install -e .
 
+      # continue-on-error so that one broken source still lets the calendar
+      # update from the sources that do work; the final step turns the run red
+      # so GitHub emails about it instead of it failing silently.
       - name: Generate events.ics
+        id: generate
+        continue-on-error: true
         run: python -m src.main
 
       - name: Commit updated calendar
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -44,3 +50,9 @@ jobs:
           else
             echo "events.ics unchanged — nothing to commit."
           fi
+
+      - name: Fail if a source broke
+        if: steps.generate.outcome == 'failure'
+        run: |
+          echo "::error::One or more event sources failed - see the 'Generate events.ics' step log."
+          exit 1

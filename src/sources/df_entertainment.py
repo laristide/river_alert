@@ -107,8 +107,17 @@ def parse_show_page(html: str, slug: str, today: datetime) -> list[Event]:
     if not has_river:
         log.info("df: show %s has no River venue link; including anyway since it was listed on the venue page", slug)
 
-    body_text = soup.get_text(" ", strip=True)
-    dates = sorted(set(_parse_dates(body_text, today)))
+    # Only read dates from the hero meta block. The page body also contains
+    # prose ("la gira arrancó el 10 de enero de 2026 en León, México"), and
+    # parsing that produced phantom events on unrelated dates.
+    meta = soup.select(".show-hero_meta__txt")
+    if meta:
+        date_text = " ".join(el.get_text(" ", strip=True) for el in meta)
+    else:
+        log.warning("df: show %s — hero meta not found, falling back to body text", slug)
+        date_text = soup.get_text(" ", strip=True)
+
+    dates = sorted(set(_parse_dates(date_text, today)))
     if not dates:
         log.warning("df: show %s — no dates parsed", slug)
         return []
@@ -119,7 +128,7 @@ def parse_show_page(html: str, slug: str, today: datetime) -> list[Event]:
             Event(
                 start=start,
                 title=title,
-                description=f"Concierto / show — Estadio Mâs Monumental — Fuente: dfentertainment.com/shows/{slug}",
+                description=f"Concierto / show — Estadio Más Monumental — Fuente: dfentertainment.com/shows/{slug}",
                 source="df_entertainment",
             )
         )

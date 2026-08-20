@@ -23,8 +23,16 @@ SOURCES = [
 ]
 
 
-def collect() -> list[Event]:
+def collect() -> tuple[list[Event], list[str]]:
+    """Return (events, names of sources that raised).
+
+    A failing source never blocks the others — a broken scraper must not wipe
+    events that the remaining sources still provide — but the caller reports a
+    non-zero exit so the failure is visible in CI instead of silently
+    producing a thinner calendar.
+    """
     all_events: list[Event] = []
+    failed: list[str] = []
     for name, fetch in SOURCES:
         try:
             evs = fetch()
@@ -32,7 +40,8 @@ def collect() -> list[Event]:
             all_events.extend(evs)
         except Exception:
             log.exception("source %s failed", name)
-    return all_events
+            failed.append(name)
+    return all_events, failed
 
 
 def filter_and_dedup(events: list[Event], today: datetime) -> list[Event]:
@@ -66,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     today = datetime.now(tz=ART)
-    raw = collect()
+    raw, failed = collect()
     events = filter_and_dedup(raw, today)
     log.info("total upcoming after dedup: %d", len(events))
 
@@ -75,12 +84,17 @@ def main(argv: list[str] | None = None) -> int:
             local = e.start.astimezone(ART).strftime("%a %Y-%m-%d %H:%M")
             print(f"  {local}  [{e.source:8s}]  {e.title}")
             print(f"             {e.description}")
-        return 0
+        return 1 if failed else 0
 
     ics_bytes = to_ics_bytes(events)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(ics_bytes)
     log.info("wrote %d bytes to %s", len(ics_bytes), args.output)
+
+    if failed:
+        log.error("sources failed: %s — calendar written but may be incomplete",
+                  ", ".join(failed))
+        return 1
     return 0
 
 
