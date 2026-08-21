@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Vélez Sarsfield
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260823T191500
 DTEND;TZID=America/Argentina/Buenos_Aires:20260823T214500
-DTSTAMP:20260820T153605Z
+DTSTAMP:20260821T124043Z
 UID:45175247dff1bb92@river-alert
 DESCRIPTION:Liga Profesional Argentina 2026 — Local — Estadio Más Mon
  umental — Fuente: riverplate.com
@@ -26,7 +26,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Independiente Santa Fe
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260826T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260827T000000
-DTSTAMP:20260820T153605Z
+DTSTAMP:20260821T124043Z
 UID:c1ce3255ee48345d@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Estadio Más Monument
  al — Fuente: riverplate.com
@@ -43,7 +43,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20260820T153605Z
+DTSTAMP:20260821T124043Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
