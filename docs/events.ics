@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Independiente Santa Fe
 DTSTART;TZID=America/Argentina/Buenos_Aires:20260826T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20260827T000000
-DTSTAMP:20260824T124321Z
+DTSTAMP:20260825T124141Z
 UID:c1ce3255ee48345d@river-alert
 DESCRIPTION:CONMEBOL Sudamericana 2026 — Local — Estadio Más Monument
  al — Fuente: riverplate.com
@@ -27,7 +27,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20260824T124321Z
+DTSTAMP:20260825T124141Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
