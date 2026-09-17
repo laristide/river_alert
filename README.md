@@ -119,11 +119,15 @@ in the Actions tab means "the calendar is thinner than it should be", not
 - **Away matches are excluded.** The calendar answers "is there something at
   the Monumental?", so fixtures at any other ground are dropped. Change
   `_is_home_venue` in `src/sources/river.py` if you want every River match.
+  The feed's name for the ground is not stable — it has been both "Estadio
+  Más Monumental" and plain "Estadio Monumental" — so the check matches
+  `monumental` anchored to Buenos Aires rather than an exact string. If every
+  confirmed home fixture ever fails that check, the run **fails on purpose**
+  instead of publishing a calendar with no matches in it.
 - **Fixtures without a confirmed date are skipped.** The AFA often lists a
   match weeks out with `Fecha sin definir`; the feed still carries a
   placeholder date, which would fire a night-before alarm for the wrong day.
   Those appear in the calendar once the club confirms the date.
-
 - **Coverage isn't 100%.** Some concerts may be booked by promoters that
   don't publish a scrape-friendly venue page (Live Nation Argentina, T4F).
   Use `manual_events.yaml` for those.
