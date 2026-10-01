@@ -3,12 +3,12 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from .ics_writer import to_ics_bytes
 from .model import ART, Event
-from .sources import df_entertainment, manual, river
+from .sources import df_entertainment, espn, manual, river
 
 log = logging.getLogger("river-alert")
 
@@ -18,9 +18,18 @@ DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / "docs" / "events.ics"
 # the earlier source wins (per user preference: one alert per day is enough).
 SOURCES = [
     ("river", river.fetch),
+    # Backup for River fixtures. Listed right after "river" so the club feed
+    # wins any date both cover; an ESPN event only survives dedup when the club
+    # feed missed that match — see backup_gaps().
+    ("espn", espn.fetch),
     ("df", df_entertainment.fetch),
     ("manual", manual.fetch),
 ]
+
+# How close a match must be for an ESPN fill-in to fail the run. Further out,
+# the two sources can legitimately confirm dates a few days apart; inside this
+# window a gap means the club feed is broken (or late) while the alarm matters.
+GAP_ALERT_WINDOW = timedelta(days=14)
 
 
 def collect() -> tuple[list[Event], list[str]]:
@@ -61,6 +70,17 @@ def filter_and_dedup(events: list[Event], today: datetime) -> list[Event]:
     return deduped
 
 
+def backup_gaps(events: list[Event], today: datetime) -> list[Event]:
+    """ESPN events that survived dedup inside the alert window.
+
+    Each one is a confirmed home match the club feed did not produce. The
+    calendar still gets it; the run is marked failed so the miss is noticed
+    before the club feed fails in a way the backup cannot cover.
+    """
+    return [e for e in events
+            if e.source == "espn" and e.start - today <= GAP_ALERT_WINDOW]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true",
@@ -78,6 +98,13 @@ def main(argv: list[str] | None = None) -> int:
     raw, failed = collect()
     events = filter_and_dedup(raw, today)
     log.info("total upcoming after dedup: %d", len(events))
+
+    gaps = backup_gaps(events, today)
+    for e in gaps:
+        log.error("river: %s on %s came only from ESPN — riverplate.com has not "
+                  "confirmed it yet, or its parser missed it", e.title, e.date_key)
+    if gaps and "river" not in failed:
+        failed.append("river (gaps filled from espn)")
 
     if args.dry_run:
         for e in events:

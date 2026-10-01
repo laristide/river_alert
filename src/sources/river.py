@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import logging
-import unicodedata
 from datetime import datetime
 from typing import Any
 
 import requests
 
 from ..model import ART, Event
+from .venue import is_monumental
 
 log = logging.getLogger(__name__)
 
@@ -20,48 +20,10 @@ UA = "Mozilla/5.0 (river-alert; +https://github.com)"
 # The upstream feed double-encodes "Más"; normalise it for display.
 _VENUE_FIXES = {"Mâs": "Más", "MÃ¡s": "Más"}
 
-# The feed's name for River's own ground is not stable: it was "Estadio Más
-# Monumental" (the sponsored name) until late August 2026 and is plain "Estadio
-# Monumental" now. Pinning the exact string silently emptied the calendar, so
-# match the bare keyword and disambiguate on city instead.
-_VENUE_KEYWORD = "monumental"
-_VENUE_CITY = "buenos aires"
-# Other grounds called "Monumental" that River genuinely visits: Atlético
-# Tucumán's Estadio Monumental José Fierro, and — in Libertadores years —
-# Universitario's in Lima and Colo-Colo's in Santiago. The city check excludes
-# all three; the name check below is a second line of defence.
-_NOT_MONUMENTAL = ("fierro",)
-
-
-def _fold(value: str) -> str:
-    """Lowercase, strip accents, collapse whitespace."""
-    folded = (
-        unicodedata.normalize("NFKD", value or "")
-        .encode("ascii", "ignore")
-        .decode("ascii")
-        .lower()
-    )
-    return " ".join(folded.split())
-
-
 def _normalise_venue(venue: str) -> str:
     for bad, good in _VENUE_FIXES.items():
         venue = venue.replace(bad, good)
     return venue
-
-
-def _is_home_venue(venue: str, city: str, country: str) -> bool:
-    folded = _fold(venue)
-    if _VENUE_KEYWORD not in folded:
-        return False
-    if any(token in folded for token in _NOT_MONUMENTAL):
-        return False
-    folded_city = _fold(city)
-    if folded_city:
-        return _VENUE_CITY in folded_city
-    # City missing from the record: fall back to country so a partial entry
-    # still resolves rather than dropping a real home match.
-    return _fold(country) in ("", "argentina")
 
 
 def fetch() -> list[Event]:
@@ -110,7 +72,7 @@ def parse(payload: Any) -> list[Event]:
 
         venue = _normalise_venue((m.get("venue_name") or "").strip())
         city = (m.get("venue_city") or "").strip()
-        if not _is_home_venue(venue, city, (m.get("venue_country") or "").strip()):
+        if not is_monumental(venue, city, (m.get("venue_country") or "").strip()):
             # Away and neutral-ground matches are not events at the Monumental.
             # Track the home ones: if every one of them lands here, the venue
             # naming has probably changed again (see the guard below).

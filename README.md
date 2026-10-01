@@ -9,9 +9,12 @@ deciding whether to move the car or skip driving entirely.
 ## How it works
 
 1. A GitHub Actions cron runs daily at 09:00 ART (12:00 UTC).
-2. The script pulls upcoming events from three sources:
+2. The script pulls upcoming events from four sources:
    - **`riverplate.com/api/v1/sports/opta/matches/recent-and-upcoming`** —
      River Plate fixtures (auto), the JSON feed the club's own site reads.
+   - **ESPN's public site API** (team 16) — an independent second copy of
+     River's fixtures (auto). It only reaches the calendar when the club feed
+     misses a confirmed home match; see [When it breaks](#when-it-breaks).
    - **`dfentertainment.com/venues/estadio-river-plate`** — DF Entertainment
      shows booked at the stadium (auto).
    - **`manual_events.yaml`** — events you add by hand when the auto-sources
@@ -87,6 +90,8 @@ src/
 ├── model.py                       Event dataclass
 ├── sources/
 │   ├── river.py                   riverplate.com fixtures API client
+│   ├── espn.py                    ESPN fixtures, backup for river.py
+│   ├── venue.py                   "is this the Monumental?" check
 │   ├── df_entertainment.py        DF venue + show pages scraper
 │   └── manual.py                  manual_events.yaml loader
 ├── ics_writer.py                  builds the .ics + VALARM
@@ -108,22 +113,31 @@ the repo's Actions tab — a push alone won't re-enable it.
 
 ## When it breaks
 
-If a source raises, the run still writes `events.ics` from the sources that
-worked, then **fails the workflow on purpose** so GitHub emails you. A red run
-in the Actions tab means "the calendar is thinner than it should be", not
-"nothing was published". Reproduce it locally with `python -m src.main
---dry-run` — the exit code is non-zero when a source failed.
+A red run in the Actions tab means **something needs a look**, not "nothing
+was published": the run always writes `events.ics` from whatever worked first.
+It goes red when:
+
+- **A source raised** — a site changed shape, or was down.
+- **ESPN filled a gap within 14 days** — ESPN has a confirmed home match the
+  club feed didn't produce. The match *is* in your calendar (its description
+  says `Fuente: ESPN`), but either riverplate.com hasn't confirmed it yet or
+  `river.py` has stopped parsing it. If it's the latter, the backup is now the
+  only thing keeping the calendar right.
+
+Reproduce any of this locally with `python -m src.main --dry-run`; the exit
+code is non-zero in exactly the cases above.
+
+A daily `chore: refresh events.ics` commit says nothing about health — the
+file carries a fresh timestamp per event, so it changes every run.
 
 ## Known limitations
 
 - **Away matches are excluded.** The calendar answers "is there something at
   the Monumental?", so fixtures at any other ground are dropped. Change
-  `_is_home_venue` in `src/sources/river.py` if you want every River match.
-  The feed's name for the ground is not stable — it has been both "Estadio
-  Más Monumental" and plain "Estadio Monumental" — so the check matches
-  `monumental` anchored to Buenos Aires rather than an exact string. If every
-  confirmed home fixture ever fails that check, the run **fails on purpose**
-  instead of publishing a calendar with no matches in it.
+  `is_monumental` in `src/sources/venue.py` if you want every River match.
+  Upstream names for the ground are not stable — "Estadio Más Monumental" and
+  plain "Estadio Monumental" have both appeared — so the check matches
+  `monumental` anchored to Buenos Aires rather than an exact string.
 - **Fixtures without a confirmed date are skipped.** The AFA often lists a
   match weeks out with `Fecha sin definir`; the feed still carries a
   placeholder date, which would fire a night-before alarm for the wrong day.
