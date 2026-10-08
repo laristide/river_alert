@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Estudiantes Río Cuarto
 DTSTART;TZID=America/Argentina/Buenos_Aires:20261010T213000
 DTEND;TZID=America/Argentina/Buenos_Aires:20261011T000000
-DTSTAMP:20261007T182529Z
+DTSTAMP:20261008T182449Z
 UID:5bed406b9a846110@river-alert
 DESCRIPTION:Liga Profesional Argentina 2026 — Local — Estadio Monument
  al — Fuente: riverplate.com
@@ -24,10 +24,26 @@ TRIGGER;VALUE=DATE-TIME:20261010T000000Z
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:River vs Racing Club
+DTSTART;TZID=America/Argentina/Buenos_Aires:20261025T191500
+DTEND;TZID=America/Argentina/Buenos_Aires:20261025T214500
+DTSTAMP:20261008T182449Z
+UID:9e2e522a55cb5721@river-alert
+DESCRIPTION:Liga Profesional Argentina 2026 — Local — Estadio Monument
+ al — Fuente: riverplate.com
+LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
+ s Aires
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evento mañana en el Monumental: River vs Racing Club
+TRIGGER;VALUE=DATE-TIME:20261025T000000Z
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20261007T182529Z
+DTSTAMP:20261008T182449Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
