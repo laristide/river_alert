@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:River vs Racing Club
 DTSTART;TZID=America/Argentina/Buenos_Aires:20261025T191500
 DTEND;TZID=America/Argentina/Buenos_Aires:20261025T214500
-DTSTAMP:20261014T163124Z
+DTSTAMP:20261015T161801Z
 UID:9e2e522a55cb5721@river-alert
 DESCRIPTION:Liga Profesional Argentina 2026 — Local — Estadio Monument
  al — Fuente: riverplate.com
@@ -26,7 +26,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20261014T163124Z
+DTSTAMP:20261015T161801Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
@@ -36,6 +36,38 @@ BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Evento mañana en el Monumental: Foo Fighters
 TRIGGER;VALUE=DATE-TIME:20270225T000000Z
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:U2
+DTSTART;TZID=America/Argentina/Buenos_Aires:20270323T200000
+DTEND;TZID=America/Argentina/Buenos_Aires:20270323T223000
+DTSTAMP:20261015T161801Z
+UID:cf7cfb05b8d2cbfd@river-alert
+DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
+ ertainment.com/shows/u2
+LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
+ s Aires
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evento mañana en el Monumental: U2
+TRIGGER;VALUE=DATE-TIME:20270323T000000Z
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:U2
+DTSTART;TZID=America/Argentina/Buenos_Aires:20270325T200000
+DTEND;TZID=America/Argentina/Buenos_Aires:20270325T223000
+DTSTAMP:20261015T161801Z
+UID:29630a0235db1b1e@river-alert
+DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
+ ertainment.com/shows/u2
+LOCATION:Estadio Más Monumental\, Av. Pres. Figueroa Alcorta 7597\, Bueno
+ s Aires
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Evento mañana en el Monumental: U2
+TRIGGER;VALUE=DATE-TIME:20270325T000000Z
 END:VALARM
 END:VEVENT
 END:VCALENDAR
