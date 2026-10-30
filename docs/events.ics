@@ -10,7 +10,7 @@ BEGIN:VEVENT
 SUMMARY:Foo Fighters
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270225T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270225T223000
-DTSTAMP:20261029T180028Z
+DTSTAMP:20261030T174206Z
 UID:8539098917dece76@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/foo-fighters
@@ -26,7 +26,7 @@ BEGIN:VEVENT
 SUMMARY:U2
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270323T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270323T223000
-DTSTAMP:20261029T180028Z
+DTSTAMP:20261030T174206Z
 UID:cf7cfb05b8d2cbfd@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/u2
@@ -42,7 +42,7 @@ BEGIN:VEVENT
 SUMMARY:U2
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270325T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270325T223000
-DTSTAMP:20261029T180028Z
+DTSTAMP:20261030T174206Z
 UID:29630a0235db1b1e@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/u2
@@ -58,7 +58,7 @@ BEGIN:VEVENT
 SUMMARY:U2
 DTSTART;TZID=America/Argentina/Buenos_Aires:20270327T200000
 DTEND;TZID=America/Argentina/Buenos_Aires:20270327T223000
-DTSTAMP:20261029T180028Z
+DTSTAMP:20261030T174206Z
 UID:22c653b7a5aabfd0@river-alert
 DESCRIPTION:Concierto / show — Estadio Más Monumental — Fuente: dfent
  ertainment.com/shows/u2
